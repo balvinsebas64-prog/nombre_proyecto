@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Proveedores — Sistema de Gestión</title>
+    <link rel="stylesheet" href="../../styles/style.css">
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/poppins/poppins.css">
+    <script src="../../scripts/guardia-sesion.js" data-login="../../login.html"></script>
+</head>
+<body class="modulo-proveedores">
+    <header>
+        <h1><i class="fas fa-truck"></i> Sistema Web de Gestión</h1>
+        <p>Módulo de Proveedores</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="../app.html"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="../modulo_usuarios/usuarios.html"><i class="fas fa-users"></i> Usuarios</a></li>
+            <li><a href="../modulo_clientes/clientes.html"><i class="fas fa-user-tie"></i> Clientes</a></li>
+            <li><a href="../modulo_productos/productos.html"><i class="fas fa-box"></i> Productos</a></li>
+            <li><a href="../modulo_ventas/ventas.html"><i class="fas fa-cash-register"></i> Ventas</a></li>
+            <li><a href="proveedores.html" class="active"><i class="fas fa-truck"></i> Proveedores</a></li>
+            <li><button type="button" class="nav-salir" data-accion="cerrarSesion"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button></li>
+        </ul>
+    </nav>
+
+    <section class="contenedor">
+        <div class="subnav">
+            <button id="tab-registrar" class="tab-activa" data-panel="panel-registrar">
+                <i class="fas fa-truck-loading"></i> Registrar
+            </button>
+            <button id="tab-listado" data-panel="panel-listado" data-refrescar="mostrarProveedores">
+                <i class="fas fa-table"></i> Listado <span class="badge-contador" id="badgeProveedores">0</span>
+            </button>
+            <button id="tab-buscar" data-panel="panel-buscar">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+            <button id="tab-actualizar" data-panel="panel-actualizar">
+                <i class="fas fa-edit"></i> Actualizar
+            </button>
+        </div>
+
+        <!-- PANEL: REGISTRAR -->
+        <div id="panel-registrar" class="panel activo">
+            <div class="formulario">
+                <h2><i class="fas fa-truck-loading"></i> Nuevo Proveedor</h2>
+
+                <label for="pr-codigo"><i class="fas fa-hashtag"></i> Código proveedor</label>
+                <input type="text" id="pr-codigo" placeholder="Ejemplo: 001" required>
+
+                <label for="pr-empresa"><i class="fas fa-building"></i> Nombre empresa</label>
+                <input type="text" id="pr-empresa" placeholder="Distribuidora Norte" required>
+
+                <label for="pr-ruc"><i class="fas fa-id-card"></i> RUC</label>
+                <input type="text" id="pr-ruc" placeholder="10456789012" required>
+
+                <label for="pr-representante"><i class="fas fa-user"></i> Representante</label>
+                <input type="text" id="pr-representante" placeholder="Juan Pérez">
+
+                <label for="pr-telefono"><i class="fas fa-phone"></i> Teléfono</label>
+                <input type="text" id="pr-telefono" placeholder="999999999">
+
+                <label for="pr-correo"><i class="fas fa-envelope"></i> Correo</label>
+                <input type="email" id="pr-correo" placeholder="proveedor@gmail.com">
+
+                <label for="pr-direccion"><i class="fas fa-map-marker-alt"></i> Dirección</label>
+                <input type="text" id="pr-direccion" placeholder="Av. Principal 123">
+
+                <label for="pr-categoria"><i class="fas fa-boxes"></i> Categoría de Productos</label>
+                <select id="pr-categoria">
+                    <option>Materiales</option>
+                    <option>Equipos</option>
+                    <option>Tecnología</option>
+                    <option>Insumos de Oficina</option>
+                    <option>Otros</option>
+                </select>
+
+                <label for="pr-fecha"><i class="fas fa-calendar"></i> Fecha de registro</label>
+                <input type="date" id="pr-fecha">
+
+                <button type="button" class="principal" data-accion="guardarProveedor">
+                    <i class="fas fa-save"></i> Guardar Proveedor
+                </button>
+                <p id="msgProveedor" class="mensaje"></p>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-listado" data-panel-tab="tab-listado" data-refrescar="mostrarProveedores">
+                    <i class="fas fa-table"></i> Ver tabla de proveedores
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL: LISTADO / ELIMINAR -->
+        <div id="panel-listado" class="panel">
+            <div class="titulo-panel"><h2><i class="fas fa-list"></i> Proveedores Registrados</h2></div>
+            <p class="subtexto">Filtra por categoría de productos o estado, y elimina proveedores dados de baja.</p>
+
+            <div class="formulario formulario-ancho">
+                <label for="f-categoria"><i class="fas fa-filter"></i> Filtrar por categoría de productos</label>
+                <select id="f-categoria" data-accion-change="mostrarProveedores">
+                    <option value="">Todas</option>
+                    <option>Materiales</option>
+                    <option>Equipos</option>
+                    <option>Tecnología</option>
+                    <option>Insumos de Oficina</option>
+                    <option>Otros</option>
+                </select>
+
+                <label for="f-estado"><i class="fas fa-toggle-on"></i> Filtrar por estado</label>
+                <select id="f-estado" data-accion-change="mostrarProveedores">
+                    <option value="">Todos</option>
+                    <option>Activo</option>
+                    <option>Inactivo</option>
+                </select>
+            </div>
+
+            <div class="tabla-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Código</th><th>Empresa</th><th>RUC</th><th>Representante</th><th>Categoría</th><th>Estado</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody id="tablaProveedores"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PANEL: BUSCAR -->
+        <div id="panel-buscar" class="panel">
+            <div class="formulario">
+                <h2><i class="fas fa-search"></i> Buscar Proveedor</h2>
+
+                <label for="bp-nombre"><i class="fas fa-building"></i> Buscar por nombre de empresa</label>
+                <input type="text" id="bp-nombre" placeholder="Ingrese proveedor">
+
+                <label for="bp-ruc"><i class="fas fa-id-card"></i> Buscar por RUC</label>
+                <input type="text" id="bp-ruc" placeholder="Ingrese RUC">
+
+                <button type="button" class="btn-buscar" data-accion="buscarProveedor">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+
+                <div class="tabla-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Código</th><th>Empresa</th><th>RUC</th><th>Representante</th><th>Teléfono</th></tr>
+                        </thead>
+                        <tbody id="tablaBusquedaProveedores">
+                            <tr class="tabla-vacia"><td colspan="5">Realice una búsqueda para ver resultados</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL: ACTUALIZAR -->
+        <div id="panel-actualizar" class="panel">
+            <div class="formulario">
+                <h2><i class="fas fa-edit"></i> Actualizar Proveedor</h2>
+
+                <label for="ac-codigo"><i class="fas fa-hashtag"></i> Código proveedor</label>
+                <input type="text" id="ac-codigo" required>
+
+                <label for="ac-telefono"><i class="fas fa-phone"></i> Nuevo teléfono</label>
+                <input type="text" id="ac-telefono">
+
+                <label for="ac-correo"><i class="fas fa-envelope"></i> Nuevo correo</label>
+                <input type="email" id="ac-correo">
+
+                <label for="ac-direccion"><i class="fas fa-map-marker-alt"></i> Nueva dirección</label>
+                <input type="text" id="ac-direccion">
+
+                <button type="button" class="btn-editar" data-accion="actualizarProveedor">
+                    <i class="fas fa-sync-alt"></i> Actualizar Datos
+                </button>
+                <p id="msgActualizar" class="mensaje"></p>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-listado" data-panel-tab="tab-listado" data-refrescar="mostrarProveedores">
+                    <i class="fas fa-table"></i> Ver tabla de proveedores
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><i class="fas fa-store"></i> Sistema Web de Gestión &copy; 2026 — <span>Proyecto Final</span></p>
+    </footer>
+
+    <script src="../../scripts/util.js"></script>
+    <script src="../../scripts/pages/proveedores.js"></script>
+</body>
+</html>

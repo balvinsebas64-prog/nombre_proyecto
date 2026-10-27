@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Contraseña</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/vendor/poppins/poppins.css">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="formulario">
+            <h2><i class="fas fa-key"></i> Cambiar Contraseña</h2>
+
+            <label for="actual"><i class="fas fa-lock"></i> Clave actual</label>
+            <input type="password" id="actual" placeholder="Clave actual" required>
+
+            <label for="nueva"><i class="fas fa-lock-open"></i> Nueva clave</label>
+            <input type="password" id="nueva" placeholder="Nueva clave" required>
+
+            <label for="confirmar"><i class="fas fa-check-double"></i> Confirmar nueva clave</label>
+            <input type="password" id="confirmar" placeholder="Repite la nueva clave" required>
+
+            <button type="button" class="principal" data-accion="cambiarClave">
+                <i class="fas fa-save"></i> Guardar Cambios
+            </button>
+
+            <p id="mensaje" class="mensaje"></p>
+            <div class="login-links">
+                <a href="login.html"><i class="fas fa-arrow-left"></i> Volver al login</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/util.js"></script>
+    <script src="scripts/pages/cambiar-clave.js"></script>
+</body>
+</html>

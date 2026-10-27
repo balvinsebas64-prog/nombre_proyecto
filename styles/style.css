@@ -1,0 +1,232 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root{
+  --azul:#1a6efd; --azul-d:#0a58ca; --azul-dd:#084298;
+  --verde:#1ea85e; --verde-d:#198754;
+  --naranja:#ff8c2a; --naranja-d:#fd7e14;
+  --gris:#7e8d9f; --gris-d:#6c757d;
+  --morado:#8a5cd6; --morado-d:#6f42c1;
+  --rojo:#e8394a; --rojo-d:#dc3545;
+  --texto:#222; --muted:#6b7280; --borde:#dde1e7;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+body{
+  font-family:'Poppins', Arial, sans-serif;
+  background:linear-gradient(160deg,#e8edf5 0%,#f0f2f5 50%,#e9eef8 100%);
+  background-attachment:fixed;
+  color:var(--texto);
+  line-height:1.6;
+}
+
+img{ max-width:100%; height:auto; display:block; }
+h1,h2,h3{ margin-bottom:15px; }
+a{ text-decoration:none; }
+
+/* ===== HEADER ===== */
+header{
+  background:linear-gradient(135deg, var(--azul) 0%, var(--azul-d) 50%, var(--azul-dd) 100%);
+  color:white; text-align:center; padding:22px 20px; font-weight:bold;
+  animation:fadeDown .6s ease; box-shadow:0 4px 18px rgba(13,110,253,.35);
+  position:relative; overflow:hidden;
+}
+header::before{ content:''; position:absolute; top:-40%; left:-10%; width:60%; height:200%; background:rgba(255,255,255,.06); transform:rotate(-20deg); pointer-events:none; }
+header::after{ content:''; position:absolute; top:-40%; right:-10%; width:40%; height:200%; background:rgba(255,255,255,.04); transform:rotate(15deg); pointer-events:none; }
+@keyframes fadeDown{ from{opacity:0;transform:translateY(-20px);} to{opacity:1;transform:translateY(0);} }
+
+.modulo-usuarios header    { background:linear-gradient(135deg, var(--azul) 0%, var(--azul-d) 60%, var(--azul-dd) 100%); }
+.modulo-clientes header    { background:linear-gradient(135deg, var(--verde) 0%, var(--verde-d) 60%, #0f5c39 100%); }
+.modulo-productos header   { background:linear-gradient(135deg, var(--naranja) 0%, var(--naranja-d) 55%, #c96208 100%); }
+.modulo-ventas header      { background:linear-gradient(135deg, var(--gris) 0%, var(--gris-d) 55%, #495057 100%); }
+.modulo-proveedores header { background:linear-gradient(135deg, var(--morado) 0%, var(--morado-d) 55%, #4a2d8c 100%); }
+
+/* ===== NAV PRINCIPAL ===== */
+nav{ background:linear-gradient(180deg,#1e2045 0%,#1a1a2e 100%); padding:12px 15px; box-shadow:0 3px 12px rgba(0,0,0,.3); }
+nav ul{ list-style:none; display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
+nav a, nav .nav-salir{ color:white; padding:8px 16px; border-radius:8px; transition:background .3s, transform .2s, box-shadow .3s; font-size:.9rem; display:flex; align-items:center; gap:6px; background:rgba(0,0,0,.18); border:none; cursor:pointer; font-family:inherit; width:auto; margin-top:0; }
+nav a:hover, nav a.active, nav .nav-salir:hover{ background:linear-gradient(135deg, var(--azul), var(--azul-d)); transform:scale(1.05); box-shadow:0 4px 12px rgba(13,110,253,.4); }
+nav .nav-salir::after{ display:none; }
+
+.modulo-clientes nav a.active   { background:linear-gradient(135deg, var(--verde), var(--verde-d)); box-shadow:0 4px 12px rgba(25,135,84,.4); }
+.modulo-productos nav a.active  { background:linear-gradient(135deg, var(--naranja), var(--naranja-d)); box-shadow:0 4px 12px rgba(253,126,20,.4); }
+.modulo-ventas nav a.active     { background:linear-gradient(135deg, var(--gris), var(--gris-d)); box-shadow:0 4px 12px rgba(108,117,125,.4); }
+.modulo-proveedores nav a.active{ background:linear-gradient(135deg, var(--morado), var(--morado-d)); box-shadow:0 4px 12px rgba(111,66,193,.4); }
+
+/* ===== SUBNAV (pestañas internas del módulo) ===== */
+.subnav{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:18px 0 6px; }
+.subnav button{
+  width:auto; padding:9px 16px; border:1.5px solid var(--borde); border-radius:9px;
+  background:white; color:#444; font-family:'Poppins',sans-serif; font-size:.85rem; font-weight:600;
+  cursor:pointer; transition:all .25s; box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.subnav button:hover{ transform:translateY(-2px); box-shadow:0 6px 14px rgba(0,0,0,.1); }
+.subnav button.tab-activa{ color:white; border-color:transparent; }
+
+.modulo-usuarios .subnav button.tab-activa   { background:linear-gradient(135deg, var(--azul), var(--azul-d)); }
+.modulo-clientes .subnav button.tab-activa   { background:linear-gradient(135deg, var(--verde), var(--verde-d)); }
+.modulo-productos .subnav button.tab-activa  { background:linear-gradient(135deg, var(--naranja), var(--naranja-d)); }
+.modulo-ventas .subnav button.tab-activa     { background:linear-gradient(135deg, var(--gris), var(--gris-d)); }
+.modulo-proveedores .subnav button.tab-activa{ background:linear-gradient(135deg, var(--morado), var(--morado-d)); }
+
+/* ===== CONTENEDOR ===== */
+.contenedor{ width:90%; max-width:1100px; margin:auto; padding:25px 0 40px; }
+.panel{ display:none; animation:fadeIn .35s ease; }
+.panel.activo{ display:block; }
+@keyframes fadeIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+/* ===== GRID (index) ===== */
+.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:18px; margin-top:20px; }
+.grid a{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+  background:linear-gradient(160deg,#ffffff 0%,#f4f7ff 100%); padding:28px 15px; text-align:center;
+  border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,.08); transition:transform .3s, box-shadow .3s, background .3s;
+  color:#333; font-size:.95rem; font-weight:600; animation:fadeUp .5s ease both; border:1px solid rgba(13,110,253,.07);
+}
+.grid a i{ font-size:2rem; background:linear-gradient(135deg, var(--azul), var(--morado-d)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.grid a span{ font-size:.78rem; font-weight:400; color:var(--muted); }
+.grid a:hover{ transform:translateY(-6px); box-shadow:0 10px 28px rgba(13,110,253,.2); background:linear-gradient(160deg,#eef4ff 0%,#e8eeff 100%); }
+@keyframes fadeUp{ from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+
+/* ===== FORMULARIO ===== */
+.formulario{
+  max-width:560px; margin:25px auto; background:linear-gradient(170deg,#ffffff 0%,#f8faff 100%);
+  padding:35px; border-radius:16px; box-shadow:0 6px 28px rgba(0,0,0,.1);
+  animation:slideIn .6s ease-out both; border:1px solid rgba(13,110,253,.08);
+}
+@keyframes slideIn{ 0%{opacity:0;transform:translateX(-30px);} 100%{opacity:1;transform:translateX(0);} }
+
+.formulario h2{
+  text-align:center; font-size:1.35rem;
+  background:linear-gradient(135deg, var(--azul), var(--morado-d));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.modulo-clientes .formulario h2   { background:linear-gradient(135deg, var(--verde), var(--verde-d)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.modulo-productos .formulario h2  { background:linear-gradient(135deg, var(--naranja), var(--naranja-d)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.modulo-ventas .formulario h2     { background:linear-gradient(135deg, var(--gris), var(--gris-d)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.modulo-proveedores .formulario h2{ background:linear-gradient(135deg, var(--morado), var(--morado-d)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+/* ===== LOGIN ===== */
+.login-wrapper{ display:grid; place-items:center; min-height:100vh; background:linear-gradient(135deg,#1a6efd33 0%,#6f42c122 50%,#0a58ca18 100%); background-attachment:fixed; }
+.login-wrapper .formulario{ width:90%; max-width:420px; margin:0; box-shadow:0 10px 40px rgba(13,110,253,.18); }
+.login-links{ text-align:center; margin-top:15px; display:flex; flex-direction:column; gap:8px; }
+.login-links a{ color:var(--azul-d); font-size:.88rem; transition:color .2s; }
+.login-links a:hover{ color:var(--azul-dd); text-decoration:underline; }
+
+/* ===== LABELS / INPUTS ===== */
+label{ display:flex; align-items:center; gap:7px; margin-top:14px; font-weight:600; font-size:.86rem; color:#444; }
+label i{ width:16px; background:linear-gradient(135deg, var(--azul), var(--azul-d)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.modulo-clientes label i   { background:linear-gradient(135deg, var(--verde), var(--verde-d)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.modulo-productos label i  { background:linear-gradient(135deg, var(--naranja), var(--naranja-d)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.modulo-ventas label i     { background:linear-gradient(135deg, var(--gris), var(--gris-d)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.modulo-proveedores label i{ background:linear-gradient(135deg, var(--morado), var(--morado-d)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+input, select, textarea{
+  width:100%; padding:11px 14px; margin-top:6px; margin-bottom:4px; border:1.5px solid var(--borde);
+  border-radius:9px; font-family:'Poppins',sans-serif; font-size:.9rem; transition:border-color .3s, box-shadow .3s;
+  background:linear-gradient(160deg,#fafbfc 0%,#f4f7ff 100%);
+}
+input:focus, select:focus, textarea:focus{ outline:none; border-color:var(--azul); box-shadow:0 0 0 3px rgba(13,110,253,.12); background:white; }
+
+input:required:invalid:not(:focus):not(:placeholder-shown){ border-color:var(--rojo-d); }
+
+/* ===== BOTONES ===== */
+button{
+  width:100%; padding:12px; margin-top:10px; border:none; border-radius:9px; cursor:pointer;
+  font-family:'Poppins',sans-serif; font-size:.95rem; font-weight:600; color:white;
+  transition:transform .2s, box-shadow .2s; position:relative; overflow:hidden;
+}
+button::after{ content:''; position:absolute; top:0; left:-100%; width:60%; height:100%; background:rgba(255,255,255,.15); transform:skewX(-20deg); transition:left .4s; }
+button:hover::after{ left:160%; }
+button:hover{ transform:scale(1.02); box-shadow:0 6px 18px rgba(0,0,0,.2); }
+
+.btn-guardar  { background:linear-gradient(135deg, var(--azul) 0%, var(--azul-d) 100%); }
+.btn-buscar   { background:linear-gradient(135deg, var(--verde) 0%, var(--verde-d) 100%); }
+.btn-editar   { background:linear-gradient(135deg, var(--naranja) 0%, var(--naranja-d) 100%); }
+.btn-eliminar { background:linear-gradient(135deg, var(--rojo) 0%, var(--rojo-d) 100%); }
+.btn-listar   { background:linear-gradient(135deg, var(--gris) 0%, var(--gris-d) 100%); }
+.btn-secundario{ background:linear-gradient(135deg, #b9c2cc 0%, #98a2ad 100%); }
+
+button[type="submit"], button.principal{ background:linear-gradient(135deg, var(--azul) 0%, var(--azul-d) 100%); }
+button[type="reset"]{ background:linear-gradient(135deg, var(--gris) 0%, var(--gris-d) 100%); margin-top:8px; }
+
+.modulo-clientes button.principal   { background:linear-gradient(135deg, var(--verde) 0%, var(--verde-d) 100%); }
+.modulo-productos button.principal  { background:linear-gradient(135deg, var(--naranja) 0%, var(--naranja-d) 100%); }
+.modulo-ventas button.principal     { background:linear-gradient(135deg, var(--gris) 0%, var(--gris-d) 100%); }
+.modulo-proveedores button.principal{ background:linear-gradient(135deg, var(--morado) 0%, var(--morado-d) 100%); }
+
+.btn-ver-tabla{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%;
+  margin-top:10px; padding:11px; border-radius:9px; font-weight:600; font-size:.9rem;
+  color:white; background:linear-gradient(135deg,#374151,#1f2937); box-shadow:0 4px 14px rgba(0,0,0,.18);
+  transition:transform .2s;
+}
+.btn-ver-tabla:hover{ transform:translateY(-2px); }
+
+/* ===== TABLA ===== */
+table{ width:100%; border-collapse:collapse; background:white; box-shadow:0 4px 20px rgba(0,0,0,.09); margin-top:20px; border-radius:12px; overflow:hidden; }
+th{ background:linear-gradient(135deg, var(--azul) 0%, var(--azul-d) 100%); color:white; padding:13px; font-size:.85rem; }
+.modulo-clientes th   { background:linear-gradient(135deg, var(--verde) 0%, var(--verde-d) 100%); }
+.modulo-productos th  { background:linear-gradient(135deg, var(--naranja) 0%, var(--naranja-d) 100%); }
+.modulo-ventas th     { background:linear-gradient(135deg, var(--gris) 0%, var(--gris-d) 100%); }
+.modulo-proveedores th{ background:linear-gradient(135deg, var(--morado) 0%, var(--morado-d) 100%); }
+td{ padding:10px 12px; border-bottom:1px solid #eee; text-align:center; font-size:.85rem; }
+tr:hover td{ background:linear-gradient(90deg,#f5f7fb 0%,#eef2fb 100%); }
+.tabla-vacia td{ color:var(--muted); padding:22px; font-style:italic; }
+.tabla-wrap{ overflow-x:auto; }
+.fila-accion{ display:flex; gap:6px; justify-content:center; }
+.fila-accion button{ width:auto; padding:6px 11px; margin:0; font-size:.78rem; }
+
+/* ===== MENSAJES ===== */
+.mensaje{ display:none; margin-top:15px; padding:12px; border-radius:8px; font-size:.88rem; border-left:4px solid; }
+.mensaje.visible{ display:block; }
+.formulario-ancho{ max-width:100%; margin:0 0 20px; }
+.mensaje.exito{ background:linear-gradient(135deg,#d1f2e4,#d1e7dd); border-color:var(--verde-d); color:#0a4a2e; }
+.mensaje.error{ background:linear-gradient(135deg,#fde2e4,#f8d7da); border-color:var(--rojo-d); color:#7a1a26; }
+.advertencia{ background:linear-gradient(135deg,#fff8dc,#fff3cd); padding:14px 18px; border-radius:10px; margin:18px 0; font-size:.85rem; border-left:4px solid #ffc107; }
+
+/* ===== PESTAÑA / CARD DE RESUMEN ===== */
+.titulo-panel{ display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+.subtexto{ color:var(--muted); font-size:.85rem; margin-bottom:10px; }
+
+.subtitulo-formulario{ margin-top:26px; padding-top:16px; border-top:1px dashed rgba(13,110,253,.18); font-size:1.05rem; }
+.totales-venta{
+  margin-top:18px; padding:16px 18px; border-radius:12px;
+  background:linear-gradient(170deg,#f4f8ff 0%,#eef4ff 100%); border:1px solid rgba(13,110,253,.1);
+}
+.totales-venta label{ font-weight:500; margin-top:0; margin-bottom:10px; }
+.totales-venta label input[type="checkbox"]{ margin-right:6px; width:auto; }
+.totales-venta p{ display:flex; justify-content:space-between; margin:4px 0; font-size:.92rem; }
+.totales-venta p strong{ display:flex; justify-content:space-between; width:100%; font-size:1.05rem; }
+
+.badge-contador{
+  display:inline-block; background:linear-gradient(135deg, var(--azul), var(--azul-d)); color:white;
+  font-size:.72rem; padding:3px 10px; border-radius:20px; font-weight:600; margin-left:8px;
+}
+.modulo-clientes .badge-contador   { background:linear-gradient(135deg, var(--verde), var(--verde-d)); }
+.modulo-productos .badge-contador  { background:linear-gradient(135deg, var(--naranja), var(--naranja-d)); }
+.modulo-ventas .badge-contador     { background:linear-gradient(135deg, var(--gris), var(--gris-d)); }
+.modulo-proveedores .badge-contador{ background:linear-gradient(135deg, var(--morado), var(--morado-d)); }
+
+/* ===== FOOTER ===== */
+footer{ background:linear-gradient(180deg,#1e2045 0%,#1a1a2e 100%); color:#ccc; text-align:center; padding:20px; margin-top:30px; font-size:.85rem; box-shadow:0 -4px 16px rgba(0,0,0,.25); }
+footer span{ background:linear-gradient(135deg, var(--azul), var(--morado-d)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; font-weight:600; }
+
+/* ===== IMAGEN PRINCIPAL ===== */
+.imagen-principal{ width:100%; max-width:300px; margin:14px auto; border-radius:12px; box-shadow:0 4px 18px rgba(0,0,0,.14); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:768px){
+  nav ul{ flex-direction:column; align-items:center; }
+  .grid{ grid-template-columns:repeat(2,1fr); }
+  .formulario{ padding:25px 20px; }
+}
+@media (max-width:480px){
+  header h1{ font-size:1.15rem; }
+  .grid{ grid-template-columns:1fr; }
+  .formulario{ width:95%; padding:20px 15px; }
+  nav a{ font-size:.8rem; padding:7px 10px; }
+  table{ font-size:.75rem; }
+  th, td{ padding:7px 5px; }
+  .subnav button{ font-size:.78rem; padding:8px 12px; }
+}

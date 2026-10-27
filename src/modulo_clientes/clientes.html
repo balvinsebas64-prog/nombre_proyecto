@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Clientes — Sistema de Gestión</title>
+    <link rel="stylesheet" href="../../styles/style.css">
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/poppins/poppins.css">
+    <script src="../../scripts/guardia-sesion.js" data-login="../../login.html"></script>
+</head>
+<body class="modulo-clientes">
+    <header>
+        <h1><i class="fas fa-user-tie"></i> Sistema Web de Gestión</h1>
+        <p>Módulo de Clientes</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="../app.html"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="../modulo_usuarios/usuarios.html"><i class="fas fa-users"></i> Usuarios</a></li>
+            <li><a href="clientes.html" class="active"><i class="fas fa-user-tie"></i> Clientes</a></li>
+            <li><a href="../modulo_productos/productos.html"><i class="fas fa-box"></i> Productos</a></li>
+            <li><a href="../modulo_ventas/ventas.html"><i class="fas fa-cash-register"></i> Ventas</a></li>
+            <li><a href="../modulo_proveedores/proveedores.html"><i class="fas fa-truck"></i> Proveedores</a></li>
+            <li><button type="button" class="nav-salir" data-accion="cerrarSesion"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button></li>
+        </ul>
+    </nav>
+
+    <section class="contenedor">
+        <div class="subnav">
+            <button id="tab-registrar" class="tab-activa" data-panel="panel-registrar">
+                <i class="fas fa-user-plus"></i> Registrar
+            </button>
+            <button id="tab-listado" data-panel="panel-listado" data-refrescar="mostrarClientes">
+                <i class="fas fa-table"></i> Listado <span class="badge-contador" id="badgeClientes">0</span>
+            </button>
+            <button id="tab-buscar" data-panel="panel-buscar">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+            <button id="tab-contacto" data-panel="panel-contacto">
+                <i class="fas fa-comments"></i> Contacto
+            </button>
+        </div>
+
+        <!-- PANEL: REGISTRAR -->
+        <div id="panel-registrar" class="panel activo">
+            <div class="formulario">
+                <h2><i class="fas fa-user-plus"></i> Registrar Nuevo Cliente</h2>
+
+                <label for="c-nombre"><i class="fas fa-id-card"></i> Nombre Completo</label>
+                <input type="text" id="c-nombre" required>
+
+                <label for="c-documento"><i class="fas fa-id-badge"></i> Documento de Identidad</label>
+                <input type="text" id="c-documento" required>
+
+                <label for="c-email"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                <input type="email" id="c-email" required>
+
+                <label for="c-telefono"><i class="fas fa-phone"></i> Teléfono</label>
+                <input type="tel" id="c-telefono">
+
+                <label for="c-direccion"><i class="fas fa-map-marker-alt"></i> Dirección</label>
+                <input type="text" id="c-direccion">
+
+                <label for="c-fecha"><i class="fas fa-birthday-cake"></i> Fecha de Nacimiento</label>
+                <input type="date" id="c-fecha">
+
+                <button type="button" class="principal" data-accion="guardarCliente">
+                    <i class="fas fa-save"></i> Registrar Cliente
+                </button>
+                <p id="msgCliente" class="mensaje"></p>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-listado" data-panel-tab="tab-listado" data-refrescar="mostrarClientes">
+                    <i class="fas fa-table"></i> Ver tabla de clientes
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL: LISTADO / ACTUALIZAR / ELIMINAR -->
+        <div id="panel-listado" class="panel">
+            <div class="titulo-panel"><h2><i class="fas fa-list"></i> Clientes Registrados</h2></div>
+            <p class="subtexto">Edita o elimina los datos de un cliente directamente desde la tabla.</p>
+            <div class="tabla-wrap">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Nombre</th><th>Documento</th><th>Correo</th><th>Teléfono</th><th>Dirección</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody id="tablaClientes"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PANEL: BUSCAR -->
+        <div id="panel-buscar" class="panel">
+            <div class="formulario">
+                <h2><i class="fas fa-search"></i> Buscar Cliente</h2>
+
+                <label for="b-tipo"><i class="fas fa-filter"></i> Buscar por</label>
+                <select id="b-tipo">
+                    <option value="nombre">Nombre</option>
+                    <option value="documento">Documento</option>
+                    <option value="email">Correo Electrónico</option>
+                </select>
+
+                <label for="b-valor"><i class="fas fa-keyboard"></i> Valor de búsqueda</label>
+                <input type="text" id="b-valor" placeholder="Escriba para buscar...">
+
+                <button type="button" class="btn-buscar" data-accion="buscarCliente">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+
+                <div class="tabla-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>ID</th><th>Nombre</th><th>Documento</th><th>Correo</th><th>Teléfono</th></tr>
+                        </thead>
+                        <tbody id="tablaBusquedaClientes">
+                            <tr class="tabla-vacia"><td colspan="5">Realice una búsqueda para ver resultados</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL: CONTACTO -->
+        <div id="panel-contacto" class="panel">
+            <div class="formulario">
+                <h2><i class="fas fa-comments"></i> Contactar con Cliente</h2>
+
+                <label for="ct-id"><i class="fas fa-id-badge"></i> ID del Cliente</label>
+                <input type="text" id="ct-id" required>
+
+                <label for="ct-medio"><i class="fas fa-list-alt"></i> Medio de contacto</label>
+                <select id="ct-medio" required>
+                    <option value="email">Correo Electrónico</option>
+                    <option value="whatsapp">WhatsApp</option>
+                    <option value="telefono">Llamada Telefónica</option>
+                    <option value="presencial">Visita Presencial</option>
+                </select>
+
+                <label for="ct-asunto"><i class="fas fa-heading"></i> Asunto</label>
+                <input type="text" id="ct-asunto" required>
+
+                <label for="ct-mensaje"><i class="fas fa-envelope-open-text"></i> Mensaje</label>
+                <textarea id="ct-mensaje" rows="4" required></textarea>
+
+                <label for="ct-prioridad"><i class="fas fa-exclamation"></i> Prioridad</label>
+                <select id="ct-prioridad">
+                    <option value="baja">Baja</option>
+                    <option value="media" selected>Media</option>
+                    <option value="alta">Alta</option>
+                    <option value="urgente">Urgente</option>
+                </select>
+
+                <button type="button" class="principal" data-accion="enviarContacto">
+                    <i class="fas fa-paper-plane"></i> Enviar Mensaje
+                </button>
+                <p id="msgContacto" class="mensaje"></p>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-listado" data-panel-tab="tab-listado" data-refrescar="mostrarClientes">
+                    <i class="fas fa-table"></i> Ver tabla de clientes
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><i class="fas fa-store"></i> Sistema Web de Gestión &copy; 2026 — <span>Proyecto Final</span></p>
+    </footer>
+
+    <script src="../../scripts/util.js"></script>
+    <script src="../../scripts/pages/clientes.js"></script>
+</body>
+</html>

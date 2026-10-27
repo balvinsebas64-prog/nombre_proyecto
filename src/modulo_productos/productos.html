@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Productos — Sistema de Gestión</title>
+    <link rel="stylesheet" href="../../styles/style.css">
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/poppins/poppins.css">
+    <script src="../../scripts/guardia-sesion.js" data-login="../../login.html"></script>
+</head>
+<body class="modulo-productos">
+    <header>
+        <h1><i class="fas fa-box"></i> Sistema Web de Gestión</h1>
+        <p>Módulo de Productos</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="../app.html"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="../modulo_usuarios/usuarios.html"><i class="fas fa-users"></i> Usuarios</a></li>
+            <li><a href="../modulo_clientes/clientes.html"><i class="fas fa-user-tie"></i> Clientes</a></li>
+            <li><a href="productos.html" class="active"><i class="fas fa-box"></i> Productos</a></li>
+            <li><a href="../modulo_ventas/ventas.html"><i class="fas fa-cash-register"></i> Ventas</a></li>
+            <li><a href="../modulo_proveedores/proveedores.html"><i class="fas fa-truck"></i> Proveedores</a></li>
+            <li><button type="button" class="nav-salir" data-accion="cerrarSesion"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button></li>
+        </ul>
+    </nav>
+
+    <section class="contenedor">
+        <div class="subnav">
+            <button id="tab-registrar" class="tab-activa" data-panel="panel-registrar">
+                <i class="fas fa-plus-circle"></i> Registrar
+            </button>
+            <button id="tab-inventario" data-panel="panel-inventario" data-refrescar="mostrarInventario">
+                <i class="fas fa-warehouse"></i> Inventario <span class="badge-contador" id="badgeProductos">0</span>
+            </button>
+            <button id="tab-stock" data-panel="panel-stock">
+                <i class="fas fa-cubes"></i> Actualizar Stock
+            </button>
+            <button id="tab-buscar" data-panel="panel-buscar">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </div>
+
+        <!-- PANEL: REGISTRAR -->
+        <div id="panel-registrar" class="panel activo">
+            <div class="formulario">
+                <h2><i class="fas fa-plus-circle"></i> Registrar Nuevo Producto</h2>
+
+                <label for="p-nombre"><i class="fas fa-tag"></i> Nombre del Producto</label>
+                <input type="text" id="p-nombre" required>
+
+                <label for="p-codigo"><i class="fas fa-barcode"></i> Código del Producto</label>
+                <input type="text" id="p-codigo" required>
+
+                <label for="p-descripcion"><i class="fas fa-align-left"></i> Descripción</label>
+                <textarea id="p-descripcion" rows="3"></textarea>
+
+                <label for="p-precio"><i class="fas fa-dollar-sign"></i> Precio (S/)</label>
+                <input type="number" id="p-precio" step="0.01" min="0" required>
+
+                <label for="p-stock"><i class="fas fa-cubes"></i> Stock Inicial</label>
+                <input type="number" id="p-stock" min="0" required>
+
+                <button type="button" class="principal" data-accion="guardarProducto">
+                    <i class="fas fa-save"></i> Registrar Producto
+                </button>
+                <p id="msgProducto" class="mensaje"></p>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-inventario" data-panel-tab="tab-inventario" data-refrescar="mostrarInventario">
+                    <i class="fas fa-table"></i> Ver tabla de productos
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL: INVENTARIO / ELIMINAR -->
+        <div id="panel-inventario" class="panel">
+            <div class="titulo-panel"><h2><i class="fas fa-warehouse"></i> Inventario de Productos</h2></div>
+            <p class="subtexto">Productos disponibles en el sistema. Puedes eliminar un producto desde la tabla.</p>
+            <div class="tabla-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Código</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody id="tablaInventario"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PANEL: ACTUALIZAR STOCK -->
+        <div id="panel-stock" class="panel">
+            <div class="formulario">
+                <h2><i class="fas fa-cubes"></i> Actualizar Stock</h2>
+
+                <label for="s-codigo"><i class="fas fa-barcode"></i> Código del Producto</label>
+                <input type="text" id="s-codigo" required>
+
+                <label for="s-stock"><i class="fas fa-sort-numeric-up"></i> Nueva Cantidad de Stock</label>
+                <input type="number" id="s-stock" min="0" required>
+
+                <button type="button" class="btn-editar" data-accion="actualizarStock">
+                    <i class="fas fa-sync-alt"></i> Actualizar Stock
+                </button>
+                <p id="msgStock" class="mensaje"></p>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-inventario" data-panel-tab="tab-inventario" data-refrescar="mostrarInventario">
+                    <i class="fas fa-table"></i> Ver tabla de productos
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL: BUSCAR -->
+        <div id="panel-buscar" class="panel">
+            <div class="formulario">
+                <h2><i class="fas fa-search"></i> Buscar Producto</h2>
+
+                <label for="bp-tipo"><i class="fas fa-filter"></i> Buscar por</label>
+                <select id="bp-tipo">
+                    <option value="codigo">Código</option>
+                    <option value="nombre">Nombre</option>
+                    <option value="descripcion">Descripción</option>
+                </select>
+
+                <label for="bp-valor"><i class="fas fa-keyboard"></i> Valor de búsqueda</label>
+                <input type="text" id="bp-valor" placeholder="Escriba para buscar...">
+
+                <button type="button" class="btn-buscar" data-accion="buscarProducto">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+
+                <div class="tabla-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Código</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Stock</th></tr>
+                        </thead>
+                        <tbody id="tablaBusquedaProductos">
+                            <tr class="tabla-vacia"><td colspan="5">Realice una búsqueda para ver resultados</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><i class="fas fa-store"></i> Sistema Web de Gestión &copy; 2026 — <span>Proyecto Final</span></p>
+    </footer>
+
+    <script src="../../scripts/util.js"></script>
+    <script src="../../scripts/pages/productos.js"></script>
+</body>
+</html>

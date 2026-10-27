@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Usuarios — Sistema de Gestión</title>
+    <link rel="stylesheet" href="../../styles/style.css">
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/poppins/poppins.css">
+    <script src="../../scripts/guardia-sesion.js" data-login="../../login.html"></script>
+</head>
+<body class="modulo-usuarios">
+    <header>
+        <h1><i class="fas fa-users-cog"></i> Sistema Web de Gestión</h1>
+        <p>Módulo de Usuarios</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="../app.html"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="usuarios.html" class="active"><i class="fas fa-users"></i> Usuarios</a></li>
+            <li><a href="../modulo_clientes/clientes.html"><i class="fas fa-user-tie"></i> Clientes</a></li>
+            <li><a href="../modulo_productos/productos.html"><i class="fas fa-box"></i> Productos</a></li>
+            <li><a href="../modulo_ventas/ventas.html"><i class="fas fa-cash-register"></i> Ventas</a></li>
+            <li><a href="../modulo_proveedores/proveedores.html"><i class="fas fa-truck"></i> Proveedores</a></li>
+            <li><button type="button" class="nav-salir" data-accion="cerrarSesion"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button></li>
+        </ul>
+    </nav>
+
+    <section class="contenedor">
+        <div class="subnav">
+            <button id="tab-registrar" class="tab-activa" data-panel="panel-registrar">
+                <i class="fas fa-user-plus"></i> Registrar Usuario
+            </button>
+            <button id="tab-listado" data-panel="panel-listado" data-refrescar="mostrarUsuarios">
+                <i class="fas fa-table"></i> Listado de Usuarios <span class="badge-contador" id="badgeUsuarios">0</span>
+            </button>
+        </div>
+
+        <!-- PANEL: REGISTRAR -->
+        <div id="panel-registrar" class="panel activo">
+            <div class="formulario">
+                <h2><i class="fas fa-user-plus"></i> Registrar Usuario</h2>
+
+                <label for="nombre"><i class="fas fa-user"></i> Nombre completo</label>
+                <input type="text" id="nombre" placeholder="Ej. Juan Pérez" required>
+
+                <label for="correo"><i class="fas fa-envelope"></i> Correo electrónico</label>
+                <input type="email" id="correo" placeholder="usuario@gmail.com" required>
+
+                <label for="clave"><i class="fas fa-lock"></i> Contraseña</label>
+                <input type="password" id="clave" placeholder="Mínimo 4 caracteres" required>
+
+                <button type="button" class="principal" data-accion="guardarUsuario">
+                    <i class="fas fa-save"></i> Guardar Usuario
+                </button>
+                <p id="msgUsuario" class="mensaje"></p>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-listado" data-panel-tab="tab-listado" data-refrescar="mostrarUsuarios">
+                    <i class="fas fa-table"></i> Ver tabla de usuarios
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL: LISTADO -->
+        <div id="panel-listado" class="panel">
+            <div class="titulo-panel">
+                <h2><i class="fas fa-list"></i> Lista de Usuarios Registrados</h2>
+            </div>
+            <p class="subtexto">Edita o elimina usuarios registrados en el sistema.</p>
+            <div class="tabla-wrap">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Clave</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody id="tablaUsuarios"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><i class="fas fa-store"></i> Sistema Web de Gestión &copy; 2026 — <span>Proyecto Final</span></p>
+    </footer>
+
+    <script src="../../scripts/util.js"></script>
+    <script src="../../scripts/pages/usuarios.js"></script>
+</body>
+</html>

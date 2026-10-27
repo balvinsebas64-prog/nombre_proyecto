@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="assets/vendor/poppins/poppins.css">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="formulario">
+            <h2><i class="fas fa-unlock-alt"></i> Recuperar Contraseña</h2>
+
+            <label for="recuperacion"><i class="fas fa-shield-alt"></i> Clave de recuperación</label>
+            <input type="password" id="recuperacion" placeholder="Clave secreta" required>
+
+            <label for="nueva"><i class="fas fa-lock"></i> Nueva contraseña</label>
+            <input type="password" id="nueva" placeholder="Nueva clave" required>
+
+            <label for="confirmar"><i class="fas fa-check-circle"></i> Confirmar nueva contraseña</label>
+            <input type="password" id="confirmar" placeholder="Repite la clave" required>
+
+            <button type="button" class="principal" data-accion="recuperar">
+                <i class="fas fa-save"></i> Restablecer Contraseña
+            </button>
+
+            <p id="mensaje" class="mensaje"></p>
+            <div class="login-links">
+                <a href="login.html"><i class="fas fa-arrow-left"></i> Volver al login</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/util.js"></script>
+    <script src="scripts/pages/recuperar.js"></script>
+</body>
+</html>

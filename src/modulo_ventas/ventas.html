@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo Ventas — Sistema de Gestión</title>
+    <link rel="stylesheet" href="../../styles/style.css">
+    <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/vendor/poppins/poppins.css">
+    <script src="../../scripts/guardia-sesion.js" data-login="../../login.html"></script>
+</head>
+<body class="modulo-ventas">
+    <header>
+        <h1><i class="fas fa-cash-register"></i> Sistema Web de Gestión</h1>
+        <p>Módulo de Ventas</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="../app.html"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="../modulo_usuarios/usuarios.html"><i class="fas fa-users"></i> Usuarios</a></li>
+            <li><a href="../modulo_clientes/clientes.html"><i class="fas fa-user-tie"></i> Clientes</a></li>
+            <li><a href="../modulo_productos/productos.html"><i class="fas fa-box"></i> Productos</a></li>
+            <li><a href="ventas.html" class="active"><i class="fas fa-cash-register"></i> Ventas</a></li>
+            <li><a href="../modulo_proveedores/proveedores.html"><i class="fas fa-truck"></i> Proveedores</a></li>
+            <li><button type="button" class="nav-salir" data-accion="cerrarSesion"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button></li>
+        </ul>
+    </nav>
+
+    <section class="contenedor">
+        <div class="subnav">
+            <button id="tab-registrar" class="tab-activa" data-panel="panel-registrar" data-refrescar="refrescarFormularioVenta">
+                <i class="fas fa-receipt"></i> Nueva Venta
+            </button>
+            <button id="tab-listado" data-panel="panel-listado" data-refrescar="mostrarVentas">
+                <i class="fas fa-table"></i> Listado <span class="badge-contador" id="badgeVentas">0</span>
+            </button>
+            <button id="tab-comprobante" data-panel="panel-comprobante">
+                <i class="fas fa-file-invoice"></i> Comprobante
+            </button>
+            <button id="tab-pago" data-panel="panel-pago">
+                <i class="fas fa-credit-card"></i> Pago
+            </button>
+            <button id="tab-devolucion" data-panel="panel-devolucion">
+                <i class="fas fa-undo"></i> Devolución
+            </button>
+            <button id="tab-cotizacion" data-panel="panel-cotizacion">
+                <i class="fas fa-file-alt"></i> Cotización
+            </button>
+        </div>
+
+        <!-- PANEL: NUEVA VENTA -->
+        <div id="panel-registrar" class="panel activo">
+            <div class="formulario">
+                <h2><i class="fas fa-receipt"></i> Nueva Venta</h2>
+
+                <label for="v-cliente"><i class="fas fa-user"></i> Cliente registrado</label>
+                <select id="v-cliente" required>
+                    <option value="">-- Seleccione un cliente --</option>
+                </select>
+
+                <label for="v-fecha"><i class="fas fa-calendar"></i> Fecha de Venta</label>
+                <input type="date" id="v-fecha" required>
+
+                <h3 class="subtitulo-formulario"><i class="fas fa-boxes"></i> Agregar productos a la venta</h3>
+
+                <label for="v-producto"><i class="fas fa-barcode"></i> Producto registrado</label>
+                <select id="v-producto" data-accion-change="actualizarPrecioUnitario">
+                    <option value="">-- Seleccione un producto --</option>
+                </select>
+
+                <label for="v-preciounitario"><i class="fas fa-dollar-sign"></i> Precio Unitario (S/)</label>
+                <input type="text" id="v-preciounitario" readonly>
+
+                <label for="v-cantidad"><i class="fas fa-sort-numeric-up"></i> Cantidad</label>
+                <input type="number" id="v-cantidad" min="1">
+
+                <button type="button" class="btn-editar" data-accion="agregarProductoCarrito">
+                    <i class="fas fa-cart-plus"></i> Agregar producto a la venta
+                </button>
+
+                <div class="tabla-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Producto</th><th>Cantidad</th><th>Precio Unit.</th><th>Subtotal</th><th>Quitar</th></tr>
+                        </thead>
+                        <tbody id="tablaCarritoVenta">
+                            <tr class="tabla-vacia"><td colspan="5">Aún no agregaste productos a esta venta</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="totales-venta">
+                    <label for="v-aplicaigv"><input type="checkbox" id="v-aplicaigv" data-accion-change="renderizarCarritoVenta" checked> Aplicar IGV (18%)</label>
+                    <p>Subtotal: <span id="v-subtotal">S/ 0.00</span></p>
+                    <p>IGV: <span id="v-igv">S/ 0.00</span></p>
+                    <p><strong>Total: <span id="v-total">S/ 0.00</span></strong></p>
+                </div>
+
+                <button type="button" class="principal" data-accion="guardarVenta">
+                    <i class="fas fa-save"></i> Registrar Venta
+                </button>
+                <p id="msgVenta" class="mensaje"></p>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-listado" data-panel-tab="tab-listado" data-refrescar="mostrarVentas">
+                    <i class="fas fa-table"></i> Ver tabla de ventas
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL: LISTADO -->
+        <div id="panel-listado" class="panel">
+            <div class="titulo-panel"><h2><i class="fas fa-list"></i> Ventas Registradas</h2></div>
+            <p class="subtexto">Historial de todas las ventas realizadas en el sistema.</p>
+            <div class="tabla-wrap">
+                <table>
+                    <thead>
+                        <tr><th>N° Venta</th><th>Cliente</th><th>Productos</th><th>Cantidad</th><th>Precio</th><th>Total</th><th>Fecha</th><th>Acciones</th></tr>
+                    </thead>
+                    <tbody id="tablaVentas"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PANEL: COMPROBANTE -->
+        <div id="panel-comprobante" class="panel">
+            <div class="formulario">
+                <h2><i class="fas fa-file-invoice"></i> Generar Comprobante</h2>
+
+                <label for="cp-numero"><i class="fas fa-hashtag"></i> Número de Venta</label>
+                <input type="text" id="cp-numero" required>
+
+                <label for="cp-tipo"><i class="fas fa-list-alt"></i> Tipo de Comprobante</label>
+                <select id="cp-tipo" required>
+                    <option value="boleta">Boleta de Venta</option>
+                    <option value="factura">Factura</option>
+                    <option value="ticket">Ticket</option>
+                    <option value="nota_credito">Nota de Crédito</option>
+                </select>
+
+                <label for="cp-documento"><i class="fas fa-id-card"></i> RUC / DNI del Cliente</label>
+                <input type="text" id="cp-documento" required>
+
+                <label for="cp-razonsocial"><i class="fas fa-building"></i> Nombre / Razón Social</label>
+                <input type="text" id="cp-razonsocial" required>
+
+                <label for="cp-fecha"><i class="fas fa-calendar-check"></i> Fecha de Emisión</label>
+                <input type="date" id="cp-fecha" required>
+
+                <button type="button" class="principal" data-accion="generarComprobante">
+                    <i class="fas fa-file-export"></i> Generar Comprobante
+                </button>
+                <p id="msgComprobante" class="mensaje"></p>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-listado" data-panel-tab="tab-listado" data-refrescar="mostrarVentas">
+                    <i class="fas fa-table"></i> Ver tabla de ventas
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL: PAGO -->
+        <div id="panel-pago" class="panel">
+            <div class="formulario">
+                <h2><i class="fas fa-credit-card"></i> Registrar Método de Pago</h2>
+
+                <label for="pg-numero"><i class="fas fa-hashtag"></i> Número de Venta</label>
+                <input type="text" id="pg-numero" required>
+
+                <label for="pg-monto"><i class="fas fa-money-bill-wave"></i> Monto Total a Pagar (S/)</label>
+                <input type="number" id="pg-monto" step="0.01" min="0" required>
+
+                <label for="pg-metodo"><i class="fas fa-wallet"></i> Método de Pago</label>
+                <select id="pg-metodo" required>
+                    <option value="efectivo">Efectivo</option>
+                    <option value="tarjeta_credito">Tarjeta de Crédito</option>
+                    <option value="tarjeta_debito">Tarjeta de Débito</option>
+                    <option value="transferencia">Transferencia Bancaria</option>
+                    <option value="yape">Yape</option>
+                    <option value="plin">Plin</option>
+                    <option value="credito">Crédito / Cuotas</option>
+                </select>
+
+                <label for="pg-operacion"><i class="fas fa-hashtag"></i> N° de Operación</label>
+                <input type="text" id="pg-operacion" required>
+
+                <button type="button" class="principal" data-accion="registrarPago">
+                    <i class="fas fa-check-circle"></i> Registrar Pago
+                </button>
+                <p id="msgPago" class="mensaje"></p>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-listado" data-panel-tab="tab-listado" data-refrescar="mostrarVentas">
+                    <i class="fas fa-table"></i> Ver tabla de ventas
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL: DEVOLUCION -->
+        <div id="panel-devolucion" class="panel">
+            <div class="formulario">
+                <h2><i class="fas fa-undo"></i> Registrar Devolución</h2>
+
+                <label for="dv-numero"><i class="fas fa-hashtag"></i> Número de Venta Original</label>
+                <input type="text" id="dv-numero" required>
+
+                <label for="dv-codigo"><i class="fas fa-barcode"></i> Código del Producto</label>
+                <input type="text" id="dv-codigo" required>
+
+                <label for="dv-cantidad"><i class="fas fa-sort-numeric-up"></i> Cantidad a Devolver</label>
+                <input type="number" id="dv-cantidad" min="1" required>
+
+                <label for="dv-motivo"><i class="fas fa-question-circle"></i> Motivo</label>
+                <select id="dv-motivo" required>
+                    <option value="defectuoso">Producto defectuoso</option>
+                    <option value="error_pedido">Error en el pedido</option>
+                    <option value="danado">Producto dañado en entrega</option>
+                    <option value="otro">Otro</option>
+                </select>
+
+                <label for="dv-reembolso"><i class="fas fa-exchange-alt"></i> Tipo de Reembolso</label>
+                <select id="dv-reembolso" required>
+                    <option value="dinero">Devolución de dinero</option>
+                    <option value="cambio">Cambio de producto</option>
+                    <option value="credito">Crédito en cuenta</option>
+                </select>
+
+                <button type="button" class="btn-eliminar" data-accion="registrarDevolucion">
+                    <i class="fas fa-undo"></i> Registrar Devolución
+                </button>
+                <p id="msgDevolucion" class="mensaje"></p>
+                <div class="advertencia">
+                    <strong>⚠️ Advertencia:</strong> Al registrar la devolución se actualizará el stock del producto.
+                </div>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-listado" data-panel-tab="tab-listado" data-refrescar="mostrarVentas">
+                    <i class="fas fa-table"></i> Ver tabla de ventas
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL: COTIZACION -->
+        <div id="panel-cotizacion" class="panel">
+            <div class="formulario">
+                <h2><i class="fas fa-file-alt"></i> Generar Cotización</h2>
+
+                <label for="ct-nombre"><i class="fas fa-building"></i> Cliente / Empresa</label>
+                <input type="text" id="ct-nombre" required>
+
+                <label for="ct-correo"><i class="fas fa-envelope"></i> Correo del Cliente</label>
+                <input type="email" id="ct-correo" required>
+
+                <label for="ct-descripcion"><i class="fas fa-align-left"></i> Descripción del Producto</label>
+                <textarea id="ct-descripcion" rows="3" required></textarea>
+
+                <label for="ct-cantidad"><i class="fas fa-sort-numeric-up"></i> Cantidad</label>
+                <input type="number" id="ct-cantidad" min="1" required>
+
+                <label for="ct-precio"><i class="fas fa-dollar-sign"></i> Precio Unitario (S/)</label>
+                <input type="number" id="ct-precio" step="0.01" min="0" required>
+
+                <label for="ct-validez"><i class="fas fa-calendar-day"></i> Validez (días)</label>
+                <input type="number" id="ct-validez" min="1" value="15" required>
+
+                <button type="button" class="principal" data-accion="generarCotizacion">
+                    <i class="fas fa-file-export"></i> Generar Cotización
+                </button>
+                <p id="msgCotizacion" class="mensaje"></p>
+
+                <button type="button" class="btn-ver-tabla" data-panel="panel-listado" data-panel-tab="tab-listado" data-refrescar="mostrarVentas">
+                    <i class="fas fa-table"></i> Ver tabla de ventas
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p><i class="fas fa-store"></i> Sistema Web de Gestión &copy; 2026 — <span>Proyecto Final</span></p>
+    </footer>
+
+    <script src="../../scripts/util.js"></script>
+    <script src="../../scripts/pages/ventas.js"></script>
+</body>
+</html>

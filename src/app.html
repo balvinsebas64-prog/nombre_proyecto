@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenida — Sistema Web de Gestión</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../assets/vendor/poppins/poppins.css">
+    <script src="../scripts/guardia-sesion.js" data-login="../login.html"></script>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-store"></i> Sistema Web de Gestión</h1>
+        <h3 id="bienvenida"><i class="fas fa-user-circle"></i> Bienvenido</h3>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="../index.html"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="modulo_usuarios/usuarios.html"><i class="fas fa-users"></i> Usuarios</a></li>
+            <li><a href="modulo_clientes/clientes.html"><i class="fas fa-user-tie"></i> Clientes</a></li>
+            <li><a href="modulo_productos/productos.html"><i class="fas fa-box"></i> Productos</a></li>
+            <li><a href="modulo_ventas/ventas.html"><i class="fas fa-cash-register"></i> Ventas</a></li>
+            <li><a href="modulo_proveedores/proveedores.html"><i class="fas fa-truck"></i> Proveedores</a></li>
+            <li><button type="button" class="nav-salir" data-accion="cerrarSesion"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button></li>
+        </ul>
+    </nav>
+
+    <section class="contenedor">
+        <h2><i class="fas fa-th-large"></i> Panel Principal</h2>
+        <p class="subtexto">Selecciona un módulo para gestionar la información del sistema.</p>
+        <div class="grid">
+            <a href="modulo_usuarios/usuarios.html"><i class="fas fa-users"></i> Usuarios <span>Acceso y cuentas</span></a>
+            <a href="modulo_clientes/clientes.html"><i class="fas fa-user-tie"></i> Clientes <span>Registro y contacto</span></a>
+            <a href="modulo_productos/productos.html"><i class="fas fa-box"></i> Productos <span>Inventario y stock</span></a>
+            <a href="modulo_ventas/ventas.html"><i class="fas fa-cash-register"></i> Ventas <span>Comprobantes y pagos</span></a>
+            <a href="modulo_proveedores/proveedores.html"><i class="fas fa-truck"></i> Proveedores <span>Compras y abastecimiento</span></a>
+        </div>
+    </section>
+
+    <footer>
+        <p><i class="fas fa-store"></i> Sistema Web de Gestión &copy; 2026 — <span>Proyecto Final</span></p>
+    </footer>
+
+    <script src="../scripts/util.js"></script>
+    <script src="../scripts/pages/app.js"></script>
+</body>
+</html>
